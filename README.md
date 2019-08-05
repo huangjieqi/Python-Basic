@@ -7,7 +7,7 @@ Python基础学习
 
 - Anaconda环境配置
 
-  Anaconda是Python的包管理器和环境管理器，可在清华镜像（https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/）上下载安装，速度比官方更快。由于之前在机器上已经安装并配置过了Anaconda3，环境配置过程在此省略。
+  Anaconda是Python的包管理器和环境管理器，可在清华镜像 https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/ 上下载安装，速度比官方更快。由于之前在机器上已经安装并配置过了Anaconda3，环境配置过程在此省略。
 
 - 解释器
 
