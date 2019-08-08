@@ -457,7 +457,7 @@ Python基础学习
      list4 = list0*1  # 第4种
      list5 = copy.copy(list0)  # 第5种
      list6 = [x for x in list0]  # 第6种
-     list7 = copy.deepcopy(list0)  # 第7种
+  list7 = copy.deepcopy(list0)  # 第7种
       
      list0.append(30)
      list0[0].append(3)
@@ -535,7 +535,7 @@ Python基础学习
      ```
      Hello Python!
      ```
-     
+
   2. *
 
      重复输出字符串
