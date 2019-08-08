@@ -365,3 +365,226 @@ Python基础学习
   11. 身份运算符`is` `is not`
   12. 成员运算符`in` `not in`
   13. 逻辑运算符`not` `and` `or`
+  
+
+## Task2
+
+### 1.1 列表
+
+- 标志
+
+  列表是一种有序的集合，可以随时添加和删除其中的元素。列表的标志为`[ ]`，列表中的元素用`,`分隔开。列表的数据项不需要具有相同的类型。
+
+- 基本操作
+
+  1. 创建
+
+     创建一个列表，只要把逗号分隔的不同的数据项使用方括号括起来即可。
+
+     ```python
+     list1 = ['physics', 'chemistry', 1997, 2000]
+     list2 = [1, 2, 3, 4, 5]
+     ```
+
+  2. append()
+
+     > list.append(obj)
+
+     append() 方法用于在列表末尾添加新的对象。
+
+     ```python
+     list = [123, 'xyz', 'zara', 'abc']
+     list.append(2009)
+     print(list)
+     ```
+
+     ```
+     [123, 'xyz', 'zara', 'abc', 2009]
+     ```
+
+  3. pop()
+
+     > list.pop([index=-1])
+
+     pop() 函数用于移除列表中的一个元素（默认最后一个元素），并且返回该元素的值。
+
+     ```python
+     list = ['Google', 'Runoob', 'Taobao']
+     element = list.pop(1)
+     print(list)
+     print(element)
+     list.pop()
+     print(list)
+     ```
+
+     ```
+     ['Google', 'Taobao']
+     Runoob
+     ['Google']
+     ```
+
+  4. del()
+
+     可以使用 del 语句来删除列表的元素。
+
+     > del list[index]
+
+     ```python
+     list = ['physics', 'chemistry', 1997, 2000]
+     del list[2]
+     print(list)
+     ```
+
+     ```
+     ['physics', 'chemistry', 2000]
+     ```
+
+  5. 拷贝
+
+     list1 = list0 表示 list1和 list0 指向同一个内存地址，只是名称不同。
+
+     list2 ~ list6 则是指向不同的列表，原列表 list0 发生改变时，拷贝列表不变，但是里面元素本身的地址并没有改变，所以如果子元素为列表时，子元素列表在拷贝时地址并不会发生变化，所以**当原列表中子列表发生改变时，拷贝列表同样会发生改变**。
+
+     list7 是深度拷贝，所以无论列表中嵌套了几层列表，拷贝列表都不会随着原列表的改变而改变。
+     
+     ```python
+     import copy
+     
+     list0 = [[1, 2], 10, 20]
+     list1 = list0  # 第1种
+     list2 = list0[:]  # 第2种
+     list3 = list(list0)  # 第3种
+     list4 = list0*1  # 第4种
+     list5 = copy.copy(list0)  # 第5种
+     list6 = [x for x in list0]  # 第6种
+  list7 = copy.deepcopy(list0)  # 第7种
+      
+     list0.append(30)
+     list0[0].append(3)
+      
+     print('list0:', list0)
+     print('list1:', list1)
+     print('list2:', list2)
+     print('list3:', list3)
+     print('list4:', list4)
+     print('list5:', list5)
+     print('list6:', list6)
+     print('list7:', list7)
+     ```
+     
+     ```
+     list0: [[1, 2, 3], 10, 20, 30]
+     list1: [[1, 2, 3], 10, 20, 30]
+     list2: [[1, 2, 3], 10, 20]
+     list3: [[1, 2, 3], 10, 20]
+     list4: [[1, 2, 3], 10, 20]
+     list5: [[1, 2, 3], 10, 20]
+     list6: [[1, 2, 3], 10, 20]
+     list7: [[1, 2], 10, 20]
+     ```
+
+- 列表相关方法
+
+  | 表达式                                | 结果                         | 描述                 |
+  | ------------------------------------- | ---------------------------- | :------------------- |
+  | len([1, 2, 3])                        | 3                            | 长度                 |
+  | [1, 2, 3] + [4, 5, 6]                 | [1, 2, 3, 4, 5, 6]           | 组合                 |
+  | ['Hi!'] * 4                           | ['Hi!', 'Hi!', 'Hi!', 'Hi!'] | 重复                 |
+  | 3 in [1, 2, 3]                        | True                         | 元素是否存在于列表中 |
+  | for x in [1, 2, 3]: print(x, end=" ") | 1 2 3                        | 迭代                 |
+
+### 1.2 元组
+
+- 标志
+
+  Python 的元组与列表类似，不同之处在于元组的元素不能修改。元组使用小括号，列表使用方括号。
+
+- 基本操作
+  
+  1. 创建
+  
+     元组创建很简单，只需要在括号中添加元素，并使用逗号隔开即可。
+  
+     ```python
+     tup1 = ('Google', 'Runoob', 1997, 2000)
+     tup2 = "a", "b", "c", "d" # 可以不加括号
+     tup3 = () # 空元组
+     ```
+  
+  2. 不可变性
+  
+     元组中的元素值是不允许修改的。
+
+### 1.3 字符串
+
+- 定义
+  
+  字符串是 Python 中最常用的数据类型。我们可以使用引号( **'** 或 **"** )来创建字符串。
+  
+- 基本操作
+
+  1. +
+
+     字符串连接
+
+     ```python
+     var1 = 'Hello World!' 
+     print(var1[:6] + 'Python!')
+     ```
+
+     ```
+     Hello Python!
+     ```
+
+  2. *
+
+     重复输出字符串
+
+     ```python
+     print(var1*2)
+     ```
+
+     ```
+     Hello World!Hello World!
+     ```
+
+  3. 读取方式
+
+     Python 访问子字符串，可以使用方括号来截取字符串。遵循**左闭右开**原则。
+
+     ```python
+     var2 = "Python"
+     print ("var1[0]: ", var1[0])
+     print ("var2[1:5]: ", var2[1:5])
+     ```
+
+     ```
+     var1[0]:  H
+     var2[1:5]:  ytho
+     ```
+
+- 字符串相关方法
+
+  1. `len(string) `返回字符串长度
+  2. `split(str="", num=string.count(str))`以 str 为分隔符截取字符串，如果 num 有指定值，则仅截取 num+1 个子字符串
+  3. `startswith(substr, beg=0,end=len(string))`检查字符串是否是以指定子字符串 substr 开头，是则返回 True，否则返回 False。如果beg 和 end 指定值，则在指定范围内检查
+
+### 1.4 字符串格式化问题
+
+在 Python 中，字符串格式化使用与 C 中 sprintf 函数一样的语法。
+
+```python
+print ("我叫 %s 今年 %d 岁!" % ('小明', 10))
+```
+
+```
+我叫 小明 今年 10 岁!
+```
+
+| 符号 | 描述                                 |
+| ---- | ------------------------------------ |
+| %c   | 格式化字符及其ASCII码                |
+| %s   | 格式化字符串                         |
+| %d   | 格式化整数                           |
+| %f   | 格式化浮点数字，可指定小数点后的精度 |
+
