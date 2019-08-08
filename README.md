@@ -369,7 +369,7 @@ Python基础学习
 
 ## Task2
 
-### 1.1 列表
+### 2.1 列表
 
 - 标志
 
@@ -493,7 +493,7 @@ Python基础学习
   | 3 in [1, 2, 3]                        | True                         | 元素是否存在于列表中 |
   | for x in [1, 2, 3]: print(x, end=" ") | 1 2 3                        | 迭代                 |
 
-### 1.2 元组
+### 2.2 元组
 
 - 标志
 
@@ -515,7 +515,7 @@ Python基础学习
   
      元组中的元素值是不允许修改的。
 
-### 1.3 字符串
+### 2.3 字符串
 
 - 定义
   
@@ -569,7 +569,7 @@ Python基础学习
   2. `split(str="", num=string.count(str))`以 str 为分隔符截取字符串，如果 num 有指定值，则仅截取 num+1 个子字符串
   3. `startswith(substr, beg=0,end=len(string))`检查字符串是否是以指定子字符串 substr 开头，是则返回 True，否则返回 False。如果beg 和 end 指定值，则在指定范围内检查
 
-### 1.4 字符串格式化问题
+### 2.4 字符串格式化问题
 
 在 Python 中，字符串格式化使用与 C 中 sprintf 函数一样的语法。
 
@@ -588,3 +588,285 @@ print ("我叫 %s 今年 %d 岁!" % ('小明', 10))
 | %d   | 格式化整数                           |
 | %f   | 格式化浮点数字，可指定小数点后的精度 |
 
+## Task3
+
+### 3.1 字典
+
+1. 定义
+
+   字典是一种可变容器模型，且可存储任意类型对象。字典的每个键值(key=>value)对用冒号`:`分割，每个对之间用逗号`,`分割，整个字典包括在花括号`{}`中。
+
+2. 创建
+
+   ```python
+   dict1 = { 'abc': 456 }
+   dict2 = { 'abc': 123, 98.6: 37 }
+   ```
+
+   ```
+   123
+   ```
+
+3. 方法
+
+   ```python
+   dict = {'Name': 'Runoob', 'Age': 7, 'Class': 'First'}
+   print(len(dict))
+   print(str(dict))
+   print(dict.get('Name')) # 存在的返回键对应的值
+   print(dict.get('Nam')) # 不存在的返回None
+   print('Age' in dict) # Age存在，返回True
+   for k, v in dict.items(): # (键, 值) 元组
+       print(k, ':', v)
+   for k in dict.keys(): # 键
+       print(k)
+   for v in dict.values(): # 值
+       print(v)
+   ```
+
+   ```
+   3
+   {'Name': 'Runoob', 'Age': 7, 'Class': 'First'}
+   Runoob
+   None
+   True
+   Name : Runoob
+   Age : 7
+   Class : First
+   Name
+   Age
+   Class
+   Runoob
+   7
+   First
+   ```
+
+### 3.2 集合
+
+1. 特性
+
+   集合（set）是一个**无序**的**不重复元素**序列。
+
+2. 创建
+
+   可以使用大括号 `{}` 或者 `set()` 函数创建集合，**注意：创建一个空集合必须用 `set()` 而不是 `{ }`，因为 `{ }` 是用来创建一个空字典。**
+
+3. 方法
+
+   - 添加元素
+
+     > s.add(x) 和 s.update(x)
+
+     ```python
+     thisset = set(("Google", "Tencent", "Taobao"))
+     thisset.add("Facebook")
+     print(thisset)
+     
+     thisset.update({1, 3}) # 参数可以是列表，元组，字典等
+     print(thisset)
+     thisset.update([1, 4], [5, 6]) 
+     print(thisset)
+     ```
+
+     ```
+     {'Facebook', 'Google', 'Tencent', 'Taobao'}
+     {'Tencent', 1, 3, 'Google', 'Facebook', 'Taobao'}
+     {1, 3, 4, 5, 6, 'Facebook', 'Taobao', 'Google', 'Tencent'}
+     ```
+
+   - 删除元素
+
+     > s.remove(x) 和 s.discard(x)
+
+     ```python
+     thisset.remove("Taobao") # 不存在会发生错误
+     print(thisset)
+     
+     thisset.discard("Alibaba") # 不存在不会发生错误
+     print(thisset)
+     ```
+
+     ```
+     {1, 3, 4, 5, 6, 'Facebook', 'Google', 'Tencent'}
+     {1, 3, 4, 5, 6, 'Facebook', 'Google', 'Tencent'}
+     ```
+
+   - 计算集合元素个数
+
+     > len(s)
+
+     ```python
+     print(len(thisset))
+     ```
+
+     ```
+     8
+     ```
+
+   - 清空集合
+
+     > s.clear()
+
+     ```python
+     print(1 in thisset)
+     ```
+
+     ```
+     True
+     ```
+
+   - 判断元素是否在集合中存在
+
+     > x in s
+
+     ```python
+     thisset.clear()
+     print(thisset)
+     ```
+
+     ```
+     set()
+     ```
+
+### 3.3 判断语句
+
+Python 中 if 语句的一般形式如下所示：
+
+```python
+if condition_1:
+    statement_block_1
+elif condition_2:
+    statement_block_2
+else:
+    statement_block_3
+```
+
+- 如果 "condition_1" 为 True 将执行 "statement_block_1" 块语句
+- 如果 "condition_1" 为False，将判断 "condition_2"
+- 如果"condition_2" 为 True 将执行 "statement_block_2" 块语句
+- 如果 "condition_2" 为False，将执行"statement_block_3"块语句
+
+注意：
+
+- 每个条件后面要使用冒号` :`，表示接下来是满足条件后要执行的语句块。
+- 使用缩进来划分语句块，相同缩进数的语句在一起组成一个语句块。
+- 在Python中没有`switch – case`语句。
+
+### 3.4 三目表达式
+
+Python没有三目运算符`:`，但有类似的替代方案，如下：
+
+> 为真时的结果 **if** 判定条件 **else** 为假时的结果
+
+```python
+x = 4
+y = 99 if x > 3 else 999
+print(y)
+```
+
+```
+99
+```
+
+### 3.5 循环语句
+
+- while
+
+  一般形式：
+
+  ```python
+  while <conditions>：
+      <statements>
+  ```
+
+  while - else 语句为在条件语句为 false 时执行 else 的语句块：
+
+  ```python
+  # while
+  n = 100
+   
+  sum = 0
+  counter = 1
+  while counter <= n:
+      sum = sum + counter
+      counter += 1
+   
+  print("1 到 %d 之和为: %d" % (n, sum))
+  
+  # while - else 语句
+  count = 0
+  while count < 5:
+     print(count, " 小于 5")
+     count = count + 1
+  else:
+     print(count, " 大于或等于 5")
+  ```
+
+  ```
+  1 到 100 之和为: 5050
+  0  小于 5
+  1  小于 5
+  2  小于 5
+  3  小于 5
+  4  小于 5
+  5  大于或等于 5
+  ```
+
+- for
+
+  for循环可以遍历任何序列的项目，如一个列表或者一个字符串。一般形式如下：
+
+  ```python
+  for <variable> in <sequence>:
+      <statements>
+  else:
+      <statements>
+  ```
+
+  ```python
+  languages = ["C", "C++", "Perl", "Python"] 
+  for x in languages:
+      print(x)
+  ```
+
+  ```
+  C
+  C++
+  Perl
+  Python
+  ```
+
+  循环语句可以有 else 子句，它在穷尽列表(以for循环)或条件变为 false (以while循环)导致循环终止时被执行，但**循环被break终止时不执行**。
+
+  ```python
+  for i in range(0, 10, 2):
+      print(i)
+  else:
+      print(i)
+  ```
+
+  ```
+  0
+  2
+  4
+  6
+  8
+  8
+  ```
+
+  ```python
+  for i in range(0, 10, 2):
+      print(i)
+      if i >= 8:
+          break
+  else:
+      print(i) # 不执行
+  ```
+
+  ```
+  0
+  2
+  4
+  6
+  8
+  ```
