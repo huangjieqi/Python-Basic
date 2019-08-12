@@ -703,9 +703,9 @@ print ("我叫 %s 今年 %d 岁!" % ('小明', 10))
      8
      ```
 
-   - 清空集合
+   - 判断元素是否在集合中存在
 
-     > s.clear()
+     > x in s
 
      ```python
      print(1 in thisset)
@@ -715,9 +715,9 @@ print ("我叫 %s 今年 %d 岁!" % ('小明', 10))
      True
      ```
 
-   - 判断元素是否在集合中存在
+   - 清空集合
 
-     > x in s
+     > s.clear()
 
      ```python
      thisset.clear()
@@ -870,3 +870,357 @@ print(y)
   6
   8
   ```
+
+## Task4
+
+### 4.1 函数关键字
+
+函数代码块以`def`关键词开头，后接函数标识符名称和圆括号 `()`。
+
+### 4.2 函数的定义
+
+```python
+def <name> (<args>):
+    <expression>
+```
+
+- 匿名函数
+
+  python 使用 **lambda** 来创建匿名函数。
+
+  ```python
+  lambda <args>: <expression>
+  ```
+
+  ```python
+  sum = lambda arg1, arg2: arg1 + arg2
+   
+  print ("10 + 20 =", sum(10, 20))
+  print ("20 + 20 =", sum(20, 20))
+  ```
+
+  ```
+  10 + 20 = 30
+  20 + 20 = 40
+  ```
+
+### 4.3 函数参数与作用域
+
+- 参数
+
+  1. 必需参数
+
+     必需参数须以正确的顺序传入函数。调用时的数量必须和声明时的一样。
+
+     ```python
+     def printme(str):
+        print(str)
+        return
+      
+     # 调用 printme 函数，不加参数会报错
+     printme()
+     ```
+
+     ```
+     TypeError: printme() missing 1 required positional argument: 'str'
+     ```
+
+  2. 关键字参数
+
+     函数调用使用关键字参数来确定传入的参数值。使用关键字参数允许函数调用时参数的顺序与声明时不一致。
+
+     ```python
+     def printinfo(name, age):
+        print("名字:", name)
+        print("年龄:", age)
+        return
+      
+     printinfo(age=21, name="Crystal")
+     ```
+
+     ```
+     名字: Crystal
+     年龄: 21
+     ```
+
+     声明函数时，参数中星号 ***** 可以单独出现。如果单独出现星号 ***** 后的参数必须用关键字传入。
+
+     ```python
+     def f(a, b, *, c): # 星号*可以单独出现，单独出现星号*后的参数必须用关键字传入
+         return a + b + c
+     
+     f(1, 2, 3)
+     ```
+
+     ```
+     TypeError: f() takes 2 positional arguments but 3 were given
+     ```
+
+     ```python
+     f(1, 2, c=3)
+     ```
+
+     ```
+     6
+     ```
+
+  3. 默认参数
+
+     调用函数时，如果没有传递参数，则会使用默认参数。
+
+     ```python
+     def printinfo(name, age=20):
+        print("名字:", name)
+        print("年龄:", age)
+        return
+      
+     printinfo(age=21, name="Crystal")
+     printinfo(name="Crystal") # age默认为20
+     ```
+
+     ```
+     名字: Crystal
+     年龄: 21
+     名字: Crystal
+     年龄: 20
+     ```
+
+  4. 不定长参数
+
+     加了星号 ***** 的参数会以**元组(tuple)**的形式导入，存放所有未命名的变量参数。
+
+     ```python
+     def printinfo(arg1, *vartuple):
+        print(arg1)
+        for var in vartuple:
+           print(var)
+        return
+      
+     printinfo(10) # 可传入空的不定长参数
+     printinfo(70, 60, 50)
+     ```
+
+     ```
+     10
+     70
+     60
+     50
+     ```
+
+     加了两个星号 ***\*** 的参数会以**字典(dict)**的形式导入。
+
+     ```python
+     def printinfo(arg1, **vardict):
+        print(arg1)
+        print(vardict)
+     
+     printinfo(1, a=2, b=3, c=4)
+     ```
+
+     ```
+     1
+     {'a': 2, 'b': 3, 'c': 4}
+     ```
+
+- 作用域
+
+  变量的作用域决定了在哪一部分程序可以访问哪个特定的变量名称。Python的作用域一共有4种。
+
+  1. L （Local） 局部作用域
+  2. E （Enclosing） 闭包函数外的函数中
+  3. G （Global） 全局作用域
+  4. B （Built-in） 内置作用域（内置函数所在模块的范围）
+
+  以 L –> E –> G –>B 的规则查找，即：在局部找不到，便会去局部外的局部找（例如闭包），再找不到就会去全局找，再者去内置中找。
+
+  ```python
+  g_count = 0  # 全局作用域
+  def outer():
+      o_count = 1  # 闭包函数外的函数中
+      def inner():
+          i_count = 2  # 局部作用域
+  ```
+
+  Python 中只有模块（module），类（class）以及函数（def、lambda）才会引入新的作用域，其它的代码块（如 if/elif/else/、try/except、for/while等）是不会引入新的作用域的，也就是说这些语句内定义的变量，外部也可以访问。
+
+  ```python
+  if True:
+      msg = 'I am from China'
+  print(msg)
+  ```
+
+  ```
+  I am from China
+  ```
+
+  如果将 msg 定义在函数中，则它就是局部变量，外部不能访问。
+
+  ```python
+  def test():
+      msg_in_func = 'I am from China'
+  print(msg_in_func)
+  ```
+
+  ```
+  NameError: name 'msg_in_func' is not defined
+  ```
+
+- 全局变量和局部变量
+
+  定义在函数内部的变量拥有一个局部作用域，定义在函数外的拥有全局作用域。局部变量只能在其被声明的函数内部访问，而全局变量可以在整个程序范围内访问。
+
+  ```python
+  total = 0 # 全局变量
+  def sum(arg1, arg2):
+      total = arg1 + arg2 # 局部变量
+      print("函数内是局部变量:", total)
+      return total
+   
+  sum(10, 20)
+  print("函数外是全局变量:", total)
+  ```
+
+  ```
+  函数内是局部变量: 30
+  函数外是全局变量: 0
+  ```
+
+  使用global关键字可以在内部作用域中修改外部作用域的变量。
+
+  ```python
+  num = 1
+  def fun1():
+      global num
+      print(num) 
+      num = 123
+      print(num) # 函数内
+  fun1()
+  print(num) # 函数外
+  ```
+
+  使用nonlocal关键字可以在嵌套作用域中修改外部变量。
+
+  ```python
+  def outer():
+      num = 10
+      def inner():
+          nonlocal num
+          num = 100
+          print(num)
+      inner()
+      print(num)
+  outer()
+  ```
+
+### 4.4 函数返回值
+
+`return [表达式]` 结束函数，选择性地返回一个值给调用方。不带表达式的return相当于返回 None。
+
+### 4.5 file
+
+1. open()
+
+   open() 方法用于打开一个文件，并返回文件对象，在对文件进行处理过程都需要使用到这个函数，如果该文件无法被打开，会抛出 OSError。使用 open() 方法一定要保证关闭文件对象，即调用 close() 方法。open() 函数常用形式是接收两个参数：文件名(file)和模式(mode)。
+
+   ```python
+   open(file, mode='r')
+   ```
+
+   mode参数有：
+
+   | 模式 |      | 描述                                                         |      |      |
+   | :--- | ---- | :----------------------------------------------------------- | ---- | ---- |
+   | t    |      | 文本模式 (默认)。                                            |      |      |
+   | x    |      | 写模式，新建一个文件，如果该文件已存在则会报错。             |      |      |
+   | b    |      | 二进制模式。                                                 |      |      |
+   | +    |      | 打开一个文件进行更新(可读可写)。                             |      |      |
+   | r    |      | 以只读方式打开文件。文件的指针将会放在文件的开头。这是默认模式。 |      |      |
+   | rb   |      | 以二进制格式打开一个文件用于只读。文件指针将会放在文件的开头。这是默认模式。一般用于非文本文件如图片等。 |      |      |
+   | r+   |      | 打开一个文件用于读写。文件指针将会放在文件的开头。           |      |      |
+   | rb+  |      | 以二进制格式打开一个文件用于读写。文件指针将会放在文件的开头。一般用于非文本文件如图片等。 |      |      |
+   | w    |      | 打开一个文件只用于写入。如果该文件已存在则打开文件，并从开头开始编辑，即原有内容会被删除。如果该文件不存在，创建新文件。 |      |      |
+   | wb   |      | 以二进制格式打开一个文件只用于写入。如果该文件已存在则打开文件，并从开头开始编辑，即原有内容会被删除。如果该文件不存在，创建新文件。一般用于非文本文件如图片等。 |      |      |
+   | w+   |      | 打开一个文件用于读写。如果该文件已存在则打开文件，并从开头开始编辑，即原有内容会被删除。如果该文件不存在，创建新文件。 |      |      |
+   | wb+  |      | 以二进制格式打开一个文件用于读写。如果该文件已存在则打开文件，并从开头开始编辑，即原有内容会被删除。如果该文件不存在，创建新文件。一般用于非文本文件如图片等。 |      |      |
+   | a    |      | 打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。也就是说，新的内容将会被写入到已有内容之后。如果该文件不存在，创建新文件进行写入。 |      |      |
+   | ab   |      | 以二进制格式打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。也就是说，新的内容将会被写入到已有内容之后。如果该文件不存在，创建新文件进行写入。 |      |      |
+   | a+   |      | 打开一个文件用于读写。如果该文件已存在，文件指针将会放在文件的结尾。文件打开时会是追加模式。如果该文件不存在，创建新文件用于读写。 |      |      |
+   | ab+  |      | 以二进制格式打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。如果该文件不存在，创建新文件用于读写。 |      |      |
+
+2. file.close()
+
+   关闭文件。
+
+3. file.readline()
+
+   读取整行，包括 "\n" 字符。
+
+4. file.readlines()
+
+   读取所有行并返回列表。
+
+5. file.seek(offset[, whence])
+
+   设置文件当前位置。
+
+6. file.tell()
+
+   返回文件当前位置。
+
+7. file.write(str)
+
+   将字符串写入文件，返回的是写入的字符长度。
+
+### 4.6 os
+
+1. os.chdir(path)
+
+   改变当前工作目录到指定的路径。
+
+2. os.getcwd()
+
+   返回当前工作目录。
+
+3. os.link(src, dst)
+
+   创建硬链接，src为用于创建硬连接的源地址，dst为用于创建硬连接的目标地址。
+
+4. os.mkdir(path[, mode])
+
+   以数字权限模式创建目录。默认的模式为 0777 (八进制)。
+
+5. os.open(file, flags[, mode])
+
+   打开一个文件，并且设置需要的打开选项，模式参数mode参数是可选的，默认为 0777。
+
+6. os.remove(path)
+
+   删除指定路径的文件。如果指定的路径是一个目录，将抛出OSError。
+
+7. os.rmdir(path)
+
+   删除指定路径的目录。如果文件夹不为空，将抛出OSError。
+
+8. os.path()
+
+   获取文件的属性。
+
+   - os.path.join(path1[, path2[, ...]])
+
+     把目录和文件名合成一个路径
+
+   - os.path.split(path)
+
+     把路径分割成 dirname 和 basename，返回一个元组
+
+   - os.path.abspath(path)
+
+     返回绝对路径
+
+   - os.path.basename(path)
+
+     返回文件名
+
+   - os.path.dirname(path)
+
+     返回文件路径
