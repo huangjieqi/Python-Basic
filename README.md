@@ -1,4 +1,5 @@
-# Python-Basic
+Python-Basic
+
 Python基础学习
 
 ## Task1
@@ -1224,3 +1225,488 @@ def <name> (<args>):
    - os.path.dirname(path)
 
      返回文件路径
+   
+
+## Task5
+
+### 5.1 面向对象
+
+- 类和实例
+
+  类是抽象的模板，比如Student类，而实例是根据类创建出来的一个个具体的"对象"，每个对象都拥有相同的方法，但各自的数据可能不同。
+
+  在类的内部，使用`def`关键字来定义一个方法，与一般函数定义不同，类方法必须包含参数 self，且为第一个参数，self 代表的是类的实例。
+
+  ```python
+  class Student(object):
+  
+      def __init__(self, name, score): # 构造函数
+          self.name = name # 参数定义
+          self.score = score
+  
+      def print_score(self):
+          print('%s: %s' % (self.name, self.score)) # 数据封装
+          
+  bart = Student('Bart Simpson', 59) # 实例化，传入参数
+  lisa = Student('Lisa Simpson', 87)
+  bart.print_score()
+  lisa.print_score()
+  ```
+
+  ```
+  Bart Simpson: 59
+  Lisa Simpson: 87
+  ```
+
+- 访问限制
+
+  在Python中，实例的变量名如果以`__`开头，就变成了一个私有变量（private），只有内部可以访问，外部不能访问。实例的方法名如果以`__`开头，就变成了一个私有方法。
+
+  ```python
+  class Student(object):
+  
+      def __init__(self, name, score):
+          self.__name = name # 变量名以"__"开头的为私有变量
+          self.__score = score
+  
+      def print_score(self):
+          print('%s: %s' % (self.__name, self.__score))
+          
+      def get_name(self): # 使用get方法获取私有变量
+          return self.__name
+  
+      def get_score(self):
+          return self.__score
+      
+      def set_score(self, score): # 避免传入无效的参数
+          if 0 <= score <= 100:
+              self.__score = score
+          else:
+              raise ValueError('bad score')
+              
+      def __foo(self): # 私有方法
+          print('这是私有方法')
+              
+  bart = Student('Bart Simpson', 59) # 实例化，传入参数
+  bart.print_score()
+  bart.set_score(60)
+  bart.print_score()
+  bart.__foo() # 直接调用私有方法
+  ```
+
+  ```
+  Bart Simpson: 59
+  Bart Simpson: 60
+  AttributeError: 'Student' object has no attribute '__foo'
+  ```
+
+- 继承和多态
+
+  当我们定义一个class的时候，可以从某个现有的class继承，新的class称为子类（Sub class），而被继承的class称为基类、父类或超类（Base class、Super class）。
+
+  ```python
+  class Animal(object): # 父类
+      def run(self):
+          print('Animal is running...')
+          
+  class Dog(Animal): # 子类
+      def run(self):
+          print('Dog is running...')
+  
+  class Cat(Animal): # 子类
+      def run(self):
+          print('Cat is running...')
+          
+  a = Animal()
+  d = Dog()
+  c = Cat()
+  a.run()
+  c.run()
+  print(isinstance(a, Animal))
+  print(isinstance(d, Animal))
+  print(isinstance(d, Dog)) # d是Dog，也是Animal
+  ```
+
+  ```
+  Animal is running...
+  Cat is running...
+  True
+  True
+  True
+  ```
+
+  任何依赖`Animal`作为参数的函数或者方法都可以不加修改地正常运行，原因就在于**多态**。多态的好处就是，当我们需要传入`Dog`、`Cat`时，我们只需要接收`Animal`类型就可以了，因为`Dog`、`Cat`都是`Animal`类型，然后按照`Animal`类型进行操作即可。由于`Animal`类型有`run()`方法，因此，传入的任意类型，只要是`Animal`类或者子类，就会自动调用实际类型的`run()`方法。
+
+  ```python
+  def run_twice(animal):
+      animal.run()
+      animal.run()
+      
+  run_twice(Animal())
+  run_twice(Dog())
+  ```
+
+  ```
+  Animal is running...
+  Animal is running...
+  Dog is running...
+  Dog is running...
+  ```
+
+- 获取对象信息
+
+  type()、isinstance()、dir()、hasattr()、setattr()、getattr()
+
+  ```python
+  class MyObject(object):
+      def __init__(self):
+          self.x = 9
+      
+      def __len__(self):
+          return 100
+      
+      def power(self):
+          return self.x * self.x
+      
+  obj = MyObject()
+  dir(obj) # 获得一个对象的所有属性和方法
+  print(len(obj))
+  print(hasattr(obj, 'x')) # 判断是否有属性x
+  print(hasattr(obj, 'power')) # 判断是否有方法power
+  setattr(obj, 'x', 10) # 设置属性x
+  print(getattr(obj, 'x')) # 获取属性x
+  print(getattr(obj, 'z', 404)) # 获取属性z，如果不存在，返回默认值404
+  ```
+
+  ```
+  100
+  True
+  True
+  10
+  404
+  ```
+
+- 实例属性和类属性
+
+  当我们定义了一个类属性后，这个属性虽然归类所有，但类的所有实例都可以访问到。
+
+  ```python
+  class Student(object):
+      count = 0
+      
+      def __init__(self, name):
+          self.name = name
+          Student.count += 1 # 每实例化一个学生，类属性count加一
+          
+  s = Student('Crystal')
+  print(s.count)
+  print(Student.count)
+  s = Student('Curry')
+  print(s.count)
+  print(Student.count)
+  ```
+
+  ```
+  1
+  1
+  2
+  2
+  ```
+
+- 运算符重载
+
+  我们可以对类的专有方法进行重载
+
+  ```python
+  class Vector:
+     def __init__(self, a, b):
+        self.a = a
+        self.b = b
+   
+     def __str__(self):
+        return 'Vector (%d, %d)' % (self.a, self.b)
+     
+     def __add__(self, other): # 类的专有方法
+        return Vector(self.a + other.a, self.b + other.b)
+   
+  v1 = Vector(2, 10)
+  v2 = Vector(5, -2)
+  print(v1 + v2)
+  ```
+
+  ```
+  Vector (7, 8)
+  ```
+
+### 5.2 正则表达式
+
+正则表达式(Regular Expression)是一种文本模式，包括普通字符（例如，a 到 z 之间的字母）和特殊字符（称为"元字符"）。正则表达式使用单个字符串来描述、匹配一系列匹配某个句法规则的字符串。
+
+- 精确匹配
+
+  `\d`匹配一个数字，`\w`匹配一个字母或数字，`\s`匹配一个空格或Tab等空白符，`.`匹配任意字符
+
+  例：`\w\w\d`可以匹配`py3`，`py.`可以匹配`py3`
+
+- 变长匹配
+
+  `*`表示0个以上字符，`+`表示1个以上字符，`?`表示0个或1个字符，`{n}`表示n个字符，`{n, m}`表示n ~ m个字符
+
+  例：`\d{3, 8}`表示3 ~ 8个数字
+
+- 使用[ ]
+
+  `[0-9a-zA-Z\_]`可以匹配一个数字、字母或者下划线；`[0-9a-zA-Z\_]+`可以匹配至少由一个数字、字母或者下划线组成的字符串，比如`'a100'`，`'0_Z'`，`'Py3000'`等等；`[a-zA-Z\_][0-9a-zA-Z\_]*`可以匹配由字母或下划线开头，后接任意个由一个数字、字母或者下划线组成的字符串，也就是Python合法的变量；`[a-zA-Z\_][0-9a-zA-Z\_]{0, 19}`更精确地限制了变量的长度是1 ~ 20个字符（前面1个字符+后面最多19个字符）。
+
+- 其他
+
+  `A|B`可以匹配A或B，所以`(P|p)ython`可以匹配`'Python'`或者`'python'`。`^`表示行的开头，`^\d`表示必须以数字开头。`$`表示行的结束，`\d$`表示必须以数字结束。
+
+### 5.3 re模块
+
+由于Python的字符串本身也用`\`转义，推荐使用Python的`r`前缀，就不用考虑转义的问题了。
+
+- 匹配
+
+  `match()`方法判断是否匹配，如果匹配成功，返回一个`Match`对象，否则返回`None`。
+
+  ```python
+  print(re.match(r'^\d{3}\-\d{3,8}$', '010-12345')) # 匹配成功，返回Match对象
+  print(re.match(r'^\d{3}\-\d{3,8}$', '010 12345')) # 匹配失败，返回None
+  ```
+
+  ```
+  <re.Match object; span=(0, 9), match='010-12345'>
+  None
+  ```
+
+- 切分字符串
+
+  字符串的split()无法匹配连续的空格，用正则表达式切分字符串比用固定的字符更灵活。
+
+  ```python
+  'a b   c'.split(' ')
+  ```
+
+  ```
+  ['a', 'b', '', '', 'c']
+  ```
+
+  ```python
+  re.split(r'\s+', 'a b   c') # 以一个或多个空白符分割
+  ```
+
+  ```
+  ['a', 'b', 'c']
+  ```
+
+  ```python
+  re.split(r'[\s\,]+', 'a,b, c  d')
+  ```
+
+  ```
+  ['a', 'b', 'c', 'd']
+  ```
+
+- 分组
+
+  除了简单地判断是否匹配之外，正则表达式还有提取子串的强大功能。用`()`表示的就是要提取的分组（Group）。如果正则表达式中定义了组，就可以在`Match`对象上用`group()`方法提取出子串来。
+
+  `group(0)`永远是原始字符串，`group(n)`(n>0)表示第n个子串。
+
+  ```python
+  m = re.match(r'^(\d{3})-(\d{3,8})$', '010-12345')
+  print(m.group(0)) # 原始字符串
+  print(m.group(1)) # 第一个子串
+  print(m.group(2)) # 第二个子串
+  ```
+
+  ```
+  010-12345
+  010
+  12345
+  ```
+
+  例：识别合法的时间
+
+  ```python
+  t = '19:05:30'
+  m = re.match(r'^(0[0-9]|1[0-9]|2[0-3]|[0-9])\:(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9]|[0-9])\:(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9]|[0-9])$', t)
+  print(m.groups())
+  ```
+
+  ```
+  ('19', '05', '30')
+  ```
+
+- 贪婪匹配
+
+  正则匹配默认是贪婪匹配，也就是匹配尽可能多的字符。
+
+  ```python
+  print(re.match(r'^(\d+)(0*)$', '102300').groups())
+  ```
+
+  ```
+  ('102300', '')
+  ```
+
+  由于`\d+`采用贪婪匹配，直接把后面的`0`全部匹配了，结果`0*`只能匹配空字符串了。
+
+  因此必须让`\d+`采用非贪婪匹配（也就是尽可能少匹配），才能把后面的`0`匹配出来，加个`?`就可以让`\d+`采用非贪婪匹配。
+
+  ```python
+  print(re.match(r'^(\d+?)(0*)$', '102300').groups())
+  ```
+
+  ```
+  ('1023', '00')
+  ```
+
+- 编译
+
+  如果一个正则表达式要重复使用几千次，出于效率的考虑，我们可以预编译该正则表达式，接下来重复使用时就不需要编译这个步骤了，直接匹配。
+
+  ```python
+  re_telephone = re.compile(r'^(\d{3})-(\d{3,8})$') # 编译
+  re_telephone.match('010-12345').groups() # 使用
+  ```
+
+  ```
+  ('010', '12345')
+  ```
+
+### 5.4 datetime
+
+- 获取当前日期和时间
+
+  ```python
+  from datetime import datetime
+  now = datetime.now()
+  print(now)
+  ```
+
+  ```
+  2019-08-13 16:00:51.950245
+  ```
+
+- 获取指定日期和时间
+
+  ```python
+  dt = datetime(2020, 9, 1, 0, 0) # 用指定日期时间创建datetime
+  print(dt)
+  ```
+
+  ```
+  2020-09-01 00:00:00
+  ```
+
+- datetime转换为timestamp
+
+  ```python
+  dt.timestamp()
+  ```
+
+  ```
+  1598889600.0
+  ```
+
+- timestamp转换为datetime
+
+  ```python
+  t = 1598889600.0
+  print(datetime.fromtimestamp(t)) # 本地时间
+  print(datetime.utcfromtimestamp(t)) # UTC时间
+  ```
+
+  ```
+  2020-09-01 00:00:00
+  2020-08-31 16:00:00
+  ```
+
+- str转换为datetime
+
+  ```python
+  cday = datetime.strptime('2015-6-1 18:19:59', '%Y-%m-%d %H:%M:%S')
+  print(cday)
+  ```
+
+  ```
+  2015-06-01 18:19:59
+  ```
+
+- datetime转换为str
+
+  ```python
+  now = datetime.now()
+  print(now.strftime('%Y-%m-%d %H:%M:%S'))
+  ```
+
+  ```
+  2019-08-13 16:05:58
+  ```
+
+- datetime加减
+
+  ```python
+  from datetime import timedelta
+  now = datetime.now()
+  print(now + timedelta(hours=10)) # 加10个小时
+  print(now - timedelta(days=1)) # 减1天
+  print(now + timedelta(days=2, hours=12)) # 加2天12小时
+  ```
+
+  ```
+  2019-08-14 02:07:37.616390
+  2019-08-12 16:07:37.616390
+  2019-08-16 04:07:37.616390
+  ```
+
+- 时区转换
+
+  先通过`utcnow()`拿到当前的UTC时间，再转换为任意时区的时间。
+
+  ```python
+  utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc)
+  print(utc_dt)
+  bj_dt = utc_dt.astimezone(timezone(timedelta(hours=8))) # astimezone()将转换时区为北京时间:
+  print(bj_dt)
+  ```
+
+  ```
+  2019-08-13 08:11:23.673090+00:00
+  2019-08-13 16:11:23.673090+08:00
+  ```
+
+### 5.5 http请求
+
+使用`urllib`发起http请求。
+
+- 用urllib.request 里的urlopen()方法发送一个请求
+
+  ```python
+  import urllib.request
+  response = urllib.request.urlopen("https://www.baidu.com")
+  html = response.read()
+  print(html) 
+  ```
+
+  ```
+  b'<html>\r\n<head>\r\n\t<script>\r\n\t\tlocation.replace(location.href.replace("https://","http://"));\r\n\t</script>\r\n</head>\r\n<body>\r\n\t<noscript><meta http-equiv="refresh" content="0;url=http://www.baidu.com/"></noscript>\r\n</body>\r\n</html>'  
+  ```
+
+- 用urllib.request 里的Request()方法发送一个请求
+
+  urlopen()不支持构造HTTP请求，不能给编写的请求添加head，无法模拟真实的浏览器发送请求。
+
+  ```python
+  import urllib.request
+  request = urllib.request.Request("https://www.baidu.com")
+  response = urllib.request.urlopen(request)
+  html = response.read()
+  print(html)
+  ```
+
+  ```
+  b'<html>\r\n<head>\r\n\t<script>\r\n\t\tlocation.replace(location.href.replace("https://","http://"));\r\n\t</script>\r\n</head>\r\n<body>\r\n\t<noscript><meta http-equiv="refresh" content="0;url=http://www.baidu.com/"></noscript>\r\n</body>\r\n</html>'
+  ```
