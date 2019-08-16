@@ -1710,3 +1710,113 @@ def <name> (<args>):
   ```
   b'<html>\r\n<head>\r\n\t<script>\r\n\t\tlocation.replace(location.href.replace("https://","http://"));\r\n\t</script>\r\n</head>\r\n<body>\r\n\t<noscript><meta http-equiv="refresh" content="0;url=http://www.baidu.com/"></noscript>\r\n</body>\r\n</html>'
   ```
+
+## Task6
+
+### 6.1 代码框架
+
+1. 游戏初始化
+2. 在shoot.png上按坐标截出飞机、子弹等的图片
+3. 游戏主循环
+   - 发射子弹
+   - 生成敌机
+   - 移动子弹、删除子弹
+   - 移动敌机、删除敌机
+   - 两机碰撞
+   - 击中敌机
+   - 绘制、显示
+   - 处理键盘事件
+   - 游戏结束、退出
+
+### 6.2 类和函数
+
+1. 子弹类
+
+   继承自pygame.sprite.Sprite类，构造函数`__init__()`定义了子弹的图片、位置和速度，函数`move()`定义了子弹的移动方式。
+
+   ```python
+   class Bullet(pygame.sprite.Sprite):
+       def __init__(self, bullet_img, init_pos):
+           pygame.sprite.Sprite.__init__(self)
+           self.image = bullet_img
+           self.rect = self.image.get_rect()
+           self.rect.midbottom = init_pos
+           self.speed = 10
+   
+       def move(self):
+           self.rect.top -= self.speed
+   ```
+
+2. 玩家类
+
+   继承自pygame.sprite.Sprite类，构造函数`__init__()`中调用了父类的构造函数，定义了玩家的飞机的图片、位置、速度和是否被击中等基本属性，函数`shoot()`定义了发射子弹的方法，函数`moveUp()`、`moveDown()`、`moveLeft()`和`moveRight()`分别定义了向上、向下、向左、向右移动的方法。
+
+   ```python
+   class Player(pygame.sprite.Sprite):
+       def __init__(self, plane_img, player_rect, init_pos):
+           pygame.sprite.Sprite.__init__(self)
+           self.image = []                                 # 用来存储玩家飞机图片的列表
+           for i in range(len(player_rect)):
+               self.image.append(plane_img.subsurface(player_rect[i]).convert_alpha())
+           self.rect = player_rect[0]                      # 初始化图片所在的矩形
+           self.rect.topleft = init_pos                    # 初始化矩形的左上角坐标
+           self.speed = 8                                  # 初始化玩家飞机速度，这里是一个确定的值
+           self.bullets = pygame.sprite.Group()            # 玩家飞机所发射的子弹的集合
+           self.is_hit = False                             # 玩家是否被击中
+   
+       # 发射子弹
+       def shoot(self, bullet_img):
+           bullet = Bullet(bullet_img, self.rect.midtop)
+           self.bullets.add(bullet)
+   
+       # 向上移动，需要判断边界
+       def moveUp(self):
+           if self.rect.top <= 0:
+               self.rect.top = 0
+           else:
+               self.rect.top -= self.speed
+   
+       # 向下移动，需要判断边界
+       def moveDown(self):
+           if self.rect.top >= SCREEN_HEIGHT - self.rect.height:
+               self.rect.top = SCREEN_HEIGHT - self.rect.height
+           else:
+               self.rect.top += self.speed
+   
+       # 向左移动，需要判断边界
+       def moveLeft(self):
+           if self.rect.left <= 0:
+               self.rect.left = 0
+           else:
+               self.rect.left -= self.speed
+   
+       # 向右移动，需要判断边界
+       def moveRight(self):
+           if self.rect.left >= SCREEN_WIDTH - self.rect.width:
+               self.rect.left = SCREEN_WIDTH - self.rect.width
+           else:
+               self.rect.left += self.speed
+   ```
+
+3. 敌机类
+
+   继承自pygame.sprite.Sprite类，构造函数`__init__()`定义了敌机的图片、位置和速度等基本属性，函数`move()`定义了敌机移动的方法。
+
+   ```python
+   class Enemy(pygame.sprite.Sprite):
+       def __init__(self, enemy_img, enemy_down_imgs, init_pos):
+           pygame.sprite.Sprite.__init__(self)
+           self.image = enemy_img
+           self.rect = self.image.get_rect()
+           self.rect.topleft = init_pos
+           self.down_imgs = enemy_down_imgs
+           self.speed = 2
+   
+       # 敌机移动，边界判断及删除在游戏主循环里处理
+       def move(self):
+           self.rect.top += self.speed
+   ```
+
+### 6.3 实验结果
+
+![](https://github.com/Crysta1ovo/Python-Basic/raw/master/img/plane.png)

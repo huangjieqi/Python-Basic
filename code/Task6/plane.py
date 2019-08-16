@@ -154,7 +154,7 @@ while running:
         if shoot_frequency >= 15:
             shoot_frequency = 0
 
-    # 生成敌机，需要控制生成频率
+    # 生成敌机，需要控制生成频率·1
     # 循环50次生成一架敌机
     if enemy_frequency % 50 == 0:
         enemy1_pos = [random.randint(0, SCREEN_WIDTH - enemy1_rect.width), 0]
